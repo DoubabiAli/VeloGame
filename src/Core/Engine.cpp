@@ -36,6 +36,7 @@ void Engine::Update()
 void Engine::Render()
 {
     SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
+    SDL_RenderClear(m_Renderer);
     SDL_RenderPresent(m_Renderer);
 }
 
