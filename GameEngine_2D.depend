@@ -6,9 +6,9 @@
 	"SDL.h"
 	"SDL_image.h"
 
-1744621806 source:c:\users\bcphb_000\desktop\projet\gameengine_2d\gameengine_2d\src\core\engine.cpp
+1744626223 source:c:\users\bcphb_000\desktop\projet\gameengine_2d\gameengine_2d\src\core\engine.cpp
 	"Engine.h"
-	<iostream>
+	"TextureManager.h"
 
 1743435350 c:\dev\sdl2\include\sdl2\sdl.h
 	"SDL_main.h"
@@ -457,4 +457,13 @@
 	"SDL_version.h"
 	"begin_code.h"
 	"close_code.h"
+
+1744623313 c:\users\bcphb_000\desktop\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.h
+	<string>
+	"SDL.h"
+	<map>
+
+1744626325 source:c:\users\bcphb_000\desktop\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.cpp
+	"TextureManager.h"
+	"Engine.h"
 
