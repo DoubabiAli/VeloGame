@@ -27,4 +27,4 @@ private:
     static TextureManager* s_Instance;
 };
 
-#endif // TEXTUREMANAGER_H
+#endif

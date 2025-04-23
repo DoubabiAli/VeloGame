@@ -48,6 +48,12 @@ private:
     std::vector<float> m_laneYPositions;
     const float TRACK_Y_POSITION = 400.0f;
     const float TRACK_HEIGHT = 200.0f;
+    private:
+
+    int m_remainingSeconds;
+    Uint32 m_lastSecondUpdate;
+    std::vector<std::string> m_timerTextures;
+    SDL_Rect m_timerRect = {SCREEN_WIDTH - 200, 20, 100, 100};
 };
 
-#endif // ENGINE_H
+#endif

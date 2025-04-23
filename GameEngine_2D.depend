@@ -467,23 +467,30 @@
 	"TextureManager.h"
 	"Engine.h"
 
-1745060743 source:c:\users\dell\velogame\main.cpp
+1745154651 source:c:\users\dell\velogame\main.cpp
 	"src/Core/Engine.h"
+	<SDL.h>
 
-1745062878 source:c:\users\dell\velogame\src\core\engine.cpp
+1745331030 source:c:\users\dell\velogame\src\core\engine.cpp
 	"Engine.h"
 	"../Graphics/TextureManager.h"
+	"../Objects/Player.h"
+	<cmath>
+	<iomanip>
+	<sstream>
 
-1745062524 c:\users\dell\velogame\src\core\engine.h
+1745185622 c:\users\dell\velogame\src\core\engine.h
+	<vector>
+	<string>
 	"SDL.h"
 	"SDL_image.h"
-	"../Objects/Player.h"
 
-1744993350 source:c:\users\dell\velogame\src\graphics\texturemanager.cpp
+1745154651 source:c:\users\dell\velogame\src\graphics\texturemanager.cpp
 	"TextureManager.h"
 	"../Core/Engine.h"
+	<SDL_image.h>
 
-1744990816 c:\users\dell\velogame\src\graphics\texturemanager.h
+1745185622 c:\users\dell\velogame\src\graphics\texturemanager.h
 	<string>
 	"SDL.h"
 	<map>
@@ -936,13 +943,18 @@
 	"begin_code.h"
 	"close_code.h"
 
-1745060743 source:c:\users\dell\velogame\src\objects\player.cpp
+1745154651 source:c:\users\dell\velogame\src\objects\player.cpp
 	"Player.h"
 	"../Graphics/TextureManager.h"
+	"../Core/Engine.h"
+	<SDL.h>
+	<cmath>
+	<algorithm>
 
-1745060743 c:\users\dell\velogame\src\objects\player.h
-	"SDL.h"
+1745185622 c:\users\dell\velogame\src\objects\player.h
 	<string>
+	<vector>
+	<SDL.h>
 
 1745074394 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\main.cpp
 	"src/Core/Engine.h"

@@ -43,4 +43,4 @@ private:
     void setLane(int laneIndex);
 };
 
-#endif // PLAYER_H
+#endif

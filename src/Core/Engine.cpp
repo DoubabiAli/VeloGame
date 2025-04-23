@@ -2,6 +2,8 @@
 #include "../Graphics/TextureManager.h"
 #include "../Objects/Player.h"
 #include <cmath>
+#include <iomanip>
+#include <sstream>
 
 Engine* Engine::s_Instance = nullptr;
 
@@ -52,6 +54,30 @@ bool Engine::Init()
         return false;
     }
 
+    if (!TextureManager::GetInstance()->Load("start", "assets/timer/start.png")) {
+       SDL_Log("Erreur : Impossible de charger start.png");
+       return false;
+    }
+
+
+    for(int i = 0; i <= 60; i++) {
+       std::ostringstream ss;
+       ss << std::setw(2) << std::setfill('0') << i;
+       std::string timerName = ss.str();
+       std::string path = "assets/timer/" + timerName + ".png";
+
+       if(!TextureManager::GetInstance()->Load(timerName, path)) {
+          SDL_Log("Erreur : Impossible de charger %s", path.c_str());
+          return false;
+       }
+    m_timerTextures.push_back(timerName);
+      }
+
+    if (!TextureManager::GetInstance()->Load("end", "assets/timer/end.png")) {
+         SDL_Log("Erreur : Impossible de charger end.png");
+         return false;
+     }
+
     float laneHeight = TRACK_HEIGHT / 3.0f;
     m_laneYPositions.push_back(TRACK_Y_POSITION + laneHeight * 0.5f);
     m_laneYPositions.push_back(TRACK_Y_POSITION + laneHeight * 1.5f);
@@ -70,12 +96,14 @@ bool Engine::Init()
 
     m_IsRunning = true;
     SDL_Log("Engine initialization successful!");
+    m_remainingSeconds = 60;
+    m_lastSecondUpdate = SDL_GetTicks();
+
     return true;
 }
 
 void Engine::Update()
 {
-
     Uint32 currentTick = SDL_GetTicks();
     m_deltaTime = (currentTick - m_lastTick) / 1000.0f;
     m_lastTick = currentTick;
@@ -94,6 +122,17 @@ void Engine::Update()
         m_BackgroundScrollX -= scrollAmount;
         m_BackgroundScrollX = fmod(m_BackgroundScrollX, static_cast<float>(SCREEN_WIDTH));
     }
+
+    Uint32 currentTime = SDL_GetTicks();
+    if(currentTime - m_lastSecondUpdate >= 1000 && m_remainingSeconds > 0) {
+        m_remainingSeconds--;
+        m_lastSecondUpdate = currentTime;
+
+        if(m_remainingSeconds == 0) {
+            SDL_Log("TEMPS ECOULE !");
+
+        }
+    }
 }
 
 void Engine::Render()
@@ -110,6 +149,26 @@ void Engine::Render()
     if (m_Player) {
         m_Player->draw();
     }
+
+
+
+std::string currentTexture;
+
+if (m_remainingSeconds == 60) {
+    currentTexture = "start";
+} else if (m_remainingSeconds == 0) {
+    currentTexture = "end";
+} else {
+    std::ostringstream ss;
+    ss << std::setw(2) << std::setfill('0') << m_remainingSeconds;
+    currentTexture = ss.str();
+}
+
+TextureManager::GetInstance()->Draw(currentTexture,
+                                    m_timerRect.x,
+                                    m_timerRect.y,
+                                    m_timerRect.w,
+                                    m_timerRect.h);
 
     SDL_RenderPresent(m_Renderer);
 }
@@ -152,6 +211,7 @@ bool Engine::Clean()
     m_Renderer = nullptr;
     m_Window = nullptr;
 
+    m_timerTextures.clear();
     IMG_Quit();
     SDL_Quit();
     return true;

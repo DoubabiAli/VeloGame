@@ -30,7 +30,21 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add directory="D:/sdl2/include/SDL2" />
+			<Add directory="D:/sdl2_image/include/SDL2" />
 		</Compiler>
+		<Linker>
+			<Add option="-lmingw32 -lSDL2 -lSDL2main -lSDL2_image" />
+			<Add directory="D:/sdl2/lib" />
+			<Add directory="D:/sdl2_image/lib" />
+		</Linker>
+		<Unit filename="main.cpp" />
+		<Unit filename="src/Core/Engine.cpp" />
+		<Unit filename="src/Core/Engine.h" />
+		<Unit filename="src/Graphics/TextureManager.cpp" />
+		<Unit filename="src/Graphics/TextureManager.h" />
+		<Unit filename="src/Objects/Player.cpp" />
+		<Unit filename="src/Objects/Player.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
