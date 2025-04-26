@@ -956,69 +956,71 @@
 	<vector>
 	<SDL.h>
 
-<<<<<<< HEAD
-1745074394 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\main.cpp
-	"src/Core/Engine.h"
-	<SDL.h>
+1745398096 D
 
-1745074662 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\core\engine.h
-=======
-1745398096 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\main.cpp
-	"src/Core/Engine.h"
+1745583346 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\main.cpp
 	<SDL.h>
+	"src/Core/Engine.h"
 
-1745523648 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\core\engine.h
->>>>>>> 50f0a4a (modify moving + gameover)
+1745701603 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\core\engine.h
+	<vector>
+	<string>
+	<random>
+	"SDL.h"
+	"SDL_image.h"
+	"SDL_ttf.h"
+	"Obstacle.h"
+
+1745398096 0a4a (modify moving + gameover)
 	<vector>
 	<string>
 	"SDL.h"
 	"SDL_image.h"
-
-<<<<<<< HEAD
-1745074805 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\objects\player.h
-=======
-1745522760 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\objects\player.h
->>>>>>> 50f0a4a (modify moving + gameover)
 	<string>
 	<vector>
 	<SDL.h>
-
-<<<<<<< HEAD
-1745074663 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\core\engine.cpp
-=======
-1745523629 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\core\engine.cpp
->>>>>>> 50f0a4a (modify moving + gameover)
 	"Engine.h"
 	"../Graphics/TextureManager.h"
 	"../Objects/Player.h"
 	<cmath>
-<<<<<<< HEAD
+	<string>
+	"SDL.h"
+	<map>
+	"TextureManager.h"
+	"../Core/Engine.h"
+	<SDL_image.h>
+	"Player.h"
+	"../Graphics/TextureManager.h"
+	"../Core/Engine.h"
+	<SDL.h>
+	<cmath>
+	<algorithm>
 
-1745074680 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.h
-=======
+1745574056 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\objects\player.h
+	<string>
+	<vector>
+	<SDL.h>
+
+1745701603 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\core\engine.cpp
+	<algorithm>
+	<cmath>
+	<iomanip>
+	<numeric>
+	<sstream>
+	<string>
+	<vector>
+	"../Graphics/TextureManager.h"
+	"../Objects/Player.h"
+	"Engine.h"
+
+1745398096 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.h
 	<iomanip>
 	<sstream>
 	<string>
 
-1745398096 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.h
->>>>>>> 50f0a4a (modify moving + gameover)
-	<string>
-	"SDL.h"
-	<map>
-
-<<<<<<< HEAD
-1745074661 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.cpp
-=======
 1745398096 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.cpp
->>>>>>> 50f0a4a (modify moving + gameover)
-	"TextureManager.h"
-	"../Core/Engine.h"
-	<SDL_image.h>
 
-<<<<<<< HEAD
-1745074742 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\objects\player.cpp
-=======
-1745522770 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\objects\player.cpp
+1745576015 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\objects\player.cpp
 	"Player.h"
 	"../Graphics/TextureManager.h"
 	"../Core/Engine.h"
@@ -1060,11 +1062,16 @@
 	<SDL_image.h>
 
 1745398096 source:c:\users\bcphb\downloads\velogame-master\src\objects\player.cpp
->>>>>>> 50f0a4a (modify moving + gameover)
-	"Player.h"
-	"../Graphics/TextureManager.h"
-	"../Core/Engine.h"
-	<SDL.h>
-	<cmath>
-	<algorithm>
+
+1745571494 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\obstacles\obstacle.cpp
+	"Obstacle.h"
+
+1745572846 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\obstacles\obstacle.h
+	<SDL_rect.h>
+	<string>
+
+1705848875 c:\dev\sdl2_ttf\include\sdl2\sdl_ttf.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
 

@@ -15,6 +15,11 @@ public:
     void draw();
     float getSpeed() const;
     void reset(float startX, const std::vector<float>& laneYPositions);
+    void ApplySpeedPenalty();
+    SDL_Rect GetCollider() const;
+
+    void IncreaseMaxSpeed(float amount, float absoluteMax);
+
 
 private:
     float m_x;
@@ -33,6 +38,14 @@ private:
     std::string m_textureId;
     int m_width;
     int m_height;
+
+    bool m_isSlowed;
+    Uint32 m_slowedStartTime;
+    const float m_penaltySpeed = 50.0f;
+    const Uint32 m_penaltyDuration = 2500;
+
+    float m_initialMaxSpeed;
+
 
     void setLane(int laneIndex);
 };
