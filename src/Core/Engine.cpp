@@ -8,6 +8,7 @@
 
 #include "../Graphics/TextureManager.h"
 #include "../Objects/Player.h"
+#include "../Menu/MainMenu.h"
 #include "Engine.h"
 
 Engine* Engine::s_Instance = nullptr;
@@ -39,6 +40,13 @@ bool Engine::Init() {
   }
 
   m_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  ////////
+  if (!MainMenu::GetInstance()->Init()) {
+    SDL_Log("Erreur : Échec de l'initialisation du menu principal.");
+    return false;
+    }
+  /////////
+
   if (m_Renderer == nullptr) {
     SDL_Log("Failed to create Renderer: %s", SDL_GetError());
     SDL_DestroyWindow(m_Window);
@@ -164,7 +172,7 @@ bool Engine::Init() {
   m_deltaTime = 0.0f;
   m_BackgroundScrollX = 0.0f;
   m_IsRunning = true;
-  m_gameState = STATE_START_SCREEN;
+  m_gameState = STATE_MAIN_MENU;
   m_remainingSeconds = 60;
   m_lastSecondUpdate = SDL_GetTicks();
   m_gameOverStartTime = 0;
@@ -228,8 +236,11 @@ void Engine::Update() {
   if (m_deltaTime > 0.05f) {
     m_deltaTime = 0.05f;
   }
+  if (m_gameState == STATE_MAIN_MENU){
+    MainMenu::GetInstance()->Update(m_deltaTime);
+  }
+  else if (m_gameState == STATE_PLAYING) {
 
-  if (m_gameState == STATE_PLAYING) {
     if (m_Player) {
       m_Player->update(m_deltaTime);
     }
@@ -334,8 +345,8 @@ void Engine::Update() {
     if (m_totalDistanceTraveled >= WIN_DISTANCE) {
       SDL_Log("WIN CONDITION MET! Distance: %.2f", m_totalDistanceTraveled);
       m_gameState = STATE_WIN;
-    }
-  } else if (m_gameState == STATE_GAME_OVER) {
+    }}
+   else if (m_gameState == STATE_GAME_OVER) {
     if (!m_showGameOverScreen) {
       Uint32 currentTime = SDL_GetTicks();
       if (currentTime - m_gameOverStartTime >= 2000) {
@@ -344,9 +355,18 @@ void Engine::Update() {
       }
     }
   }
+
 }
 
 void Engine::Render() {
+   /////////
+  if (m_gameState == STATE_MAIN_MENU) {
+       MainMenu::GetInstance()->Render();
+       SDL_RenderPresent(m_Renderer);
+       return;
+}
+   ////////
+
   if (m_gameState == STATE_GAME_OVER) {
     if (m_showGameOverScreen) {
       SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
@@ -413,7 +433,20 @@ void Engine::Render() {
       if (TextureManager::GetInstance()->QueryTexture("start", nullptr, nullptr)) {
         TextureManager::GetInstance()->Draw("start", m_timerRect.x, m_timerRect.y, m_timerRect.w, m_timerRect.h);
       }
-    } else if (m_gameState == STATE_PLAYING) {
+    }
+    /////////
+     else if (m_gameState == STATE_ABOUT) {
+
+        SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
+        SDL_RenderClear(m_Renderer);
+
+        if (TextureManager::GetInstance()->QueryTexture("about_screen", nullptr, nullptr)) {
+            TextureManager::GetInstance()->Draw("about_screen", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+           }
+       }
+    ////////
+
+     else if (m_gameState == STATE_PLAYING) {
       std::string currentTimerTextureId = "end";
       if (m_remainingSeconds > 0 && m_remainingSeconds <= 60) {
         std::ostringstream ss;
@@ -431,7 +464,10 @@ void Engine::Render() {
   }
   SDL_RenderPresent(m_Renderer);
 }
+///////////////
 
+
+/////////
 void Engine::Events() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
@@ -440,6 +476,12 @@ void Engine::Events() {
       return;
     }
     switch (m_gameState) {
+        //////
+      case STATE_MAIN_MENU:
+                MainMenu::GetInstance()->HandleEvent(event);
+                break;
+        /////////
+
       case STATE_START_SCREEN:
         if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RIGHT) {
           SDL_Log("RIGHT ARROW pressed! Changing state to PLAYING.");
@@ -471,6 +513,12 @@ void Engine::Events() {
           }
         }
         break;
+       /////////
+      case STATE_ABOUT:
+            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+                m_gameState = STATE_MAIN_MENU;
+            }
+       ///////////
       case STATE_GAME_OVER:
       case STATE_WIN:
         if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r) {

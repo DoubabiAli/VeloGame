@@ -13,11 +13,12 @@
 #define SCREEN_HEIGHT 600
 
 class Player;
-
 enum GameState {
+    STATE_MAIN_MENU,
     STATE_START_SCREEN,
     STATE_PLAYING,
     STATE_GAME_OVER,
+    STATE_ABOUT,
     STATE_WIN
 };
 
@@ -40,6 +41,7 @@ public:
     inline bool IsRunning() const { return m_IsRunning; }
     inline SDL_Renderer* GetRenderer() { return m_Renderer; }
     inline GameState GetGameState() const { return m_gameState; }
+    inline void SetGameState(GameState state) { m_gameState = state; }
 
 private:
     Engine() :

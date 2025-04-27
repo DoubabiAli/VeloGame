@@ -1,5 +1,4 @@
 #include <SDL.h>
-
 #include "src/Core/Engine.h"
 
 int main(int argc, char** argv) {

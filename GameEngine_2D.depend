@@ -467,30 +467,38 @@
 	"TextureManager.h"
 	"Engine.h"
 
-1745154651 source:c:\users\dell\velogame\main.cpp
-	"src/Core/Engine.h"
+1745714228 source:c:\users\dell\velogame\main.cpp
 	<SDL.h>
+	"src/Core/Engine.h"
 
-1745331030 source:c:\users\dell\velogame\src\core\engine.cpp
-	"Engine.h"
-	"../Graphics/TextureManager.h"
-	"../Objects/Player.h"
+1745753667 source:c:\users\dell\velogame\src\core\engine.cpp
+	<algorithm>
 	<cmath>
 	<iomanip>
+	<numeric>
 	<sstream>
+	<string>
+	<vector>
+	"../Graphics/TextureManager.h"
+	"../Objects/Player.h"
+	"../Menu/MainMenu.h"
+	"Engine.h"
 
-1745185622 c:\users\dell\velogame\src\core\engine.h
+1745717981 c:\users\dell\velogame\src\core\engine.h
 	<vector>
 	<string>
+	<random>
 	"SDL.h"
 	"SDL_image.h"
+	"SDL_ttf.h"
+	"Obstacle.h"
 
-1745154651 source:c:\users\dell\velogame\src\graphics\texturemanager.cpp
+1745710408 source:c:\users\dell\velogame\src\graphics\texturemanager.cpp
 	"TextureManager.h"
 	"../Core/Engine.h"
 	<SDL_image.h>
 
-1745185622 c:\users\dell\velogame\src\graphics\texturemanager.h
+1745710408 c:\users\dell\velogame\src\graphics\texturemanager.h
 	<string>
 	"SDL.h"
 	<map>
@@ -943,7 +951,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1745154651 source:c:\users\dell\velogame\src\objects\player.cpp
+1745710408 source:c:\users\dell\velogame\src\objects\player.cpp
 	"Player.h"
 	"../Graphics/TextureManager.h"
 	"../Core/Engine.h"
@@ -951,7 +959,7 @@
 	<cmath>
 	<algorithm>
 
-1745185622 c:\users\dell\velogame\src\objects\player.h
+1745710408 c:\users\dell\velogame\src\objects\player.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -1074,4 +1082,21 @@
 	"SDL.h"
 	"begin_code.h"
 	"close_code.h"
+
+1745710408 c:\users\dell\velogame\src\obstacles\obstacle.h
+	<SDL_rect.h>
+	<string>
+
+1745710408 source:c:\users\dell\velogame\src\obstacles\obstacle.cpp
+	"Obstacle.h"
+
+1745717608 c:\users\dell\velogame\src\menu\mainmenu.h
+	"SDL.h"
+	"../Core/Engine.h"
+
+1745714604 source:c:\users\dell\velogame\src\menu\mainmenu.cpp
+	"MainMenu.h"
+	"../Core/Engine.h"
+	"../Graphics/TextureManager.h"
+	<SDL.h>
 
