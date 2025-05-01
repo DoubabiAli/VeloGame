@@ -8,9 +8,12 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "Obstacle.h"
+#include "../Audio/AudioManager.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
+#define VOLUME_MAX 128
+#define VOLUME_STEP 8
 
 class Player;
 enum GameState {
@@ -41,7 +44,13 @@ public:
     inline bool IsRunning() const { return m_IsRunning; }
     inline SDL_Renderer* GetRenderer() { return m_Renderer; }
     inline GameState GetGameState() const { return m_gameState; }
-    inline void SetGameState(GameState state) { m_gameState = state; }
+    void SetGameState(GameState newState);
+
+    void IncreaseVolume();
+    void DecreaseVolume();
+    void ToggleMute();
+    inline bool IsMuted() const { return m_isMuted; }
+    inline int GetMasterVolume() const { return m_currentMasterVolume; }
 
 private:
     Engine() :
@@ -74,8 +83,26 @@ private:
         m_totalDistanceTraveled(0.0f),
         m_uiFont(nullptr),
         m_distanceTexture(nullptr),
-        m_lastDisplayedDistance(-1)
+        m_lastDisplayedDistance(-1),
+        m_lastCountdownSecondPlayed(-1),
+        m_currentMasterVolume(VOLUME_MAX),
+        m_isMuted(false),
+        m_volumeBeforeMute(VOLUME_MAX),
+        m_returnPromptTexture(nullptr),
+        m_showReturnPrompt(false),
+        m_endScreenStartTime(0)
     {}
+
+    int m_currentMasterVolume;
+    bool m_isMuted;
+    int m_volumeBeforeMute;
+    void ApplyMasterVolume();
+
+    SDL_Texture* m_returnPromptTexture;
+    SDL_Rect m_returnPromptRect;
+    bool m_showReturnPrompt;
+    Uint32 m_endScreenStartTime;
+    const Uint32 RETURN_PROMPT_DELAY = 1500;
 
     bool m_IsRunning;
     SDL_Window* m_Window;
@@ -95,7 +122,6 @@ private:
     GameState m_gameState;
     Uint32 m_gameOverStartTime;
     bool m_showGameOverScreen;
-
     std::vector<Obstacle> m_obstacles;
     float m_obstacleSpawnInterval;
     float m_timeSinceLastSpawn;
@@ -107,22 +133,18 @@ private:
     int m_obstacleTextureHeight;
     std::vector<std::string> m_obstacleTextureIds;
     std::mt19937 m_rng;
-
     Uint32 m_lastMaxSpeedIncreaseTime;
     const Uint32 m_maxSpeedIncreaseInterval;
     const float m_maxSpeedIncreaseAmount;
     const float m_absoluteMaxPlayerSpeed;
-
     const int m_doubleSpawnChance;
-
     float m_totalDistanceTraveled;
     const float WIN_DISTANCE = 35000.0f;
-
     TTF_Font* m_uiFont;
     SDL_Rect m_distanceRect = { 15, 15, 0, 0 };
     SDL_Texture* m_distanceTexture;
     int m_lastDisplayedDistance;
-
+    int m_lastCountdownSecondPlayed;
 
     void SpawnObstacle();
 };

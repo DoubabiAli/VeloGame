@@ -964,13 +964,13 @@
 	<vector>
 	<SDL.h>
 
-1745398096 D
+1745714604 D
 
-1745583346 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\main.cpp
+1746052346 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\main.cpp
 	<SDL.h>
 	"src/Core/Engine.h"
 
-1745701603 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\core\engine.h
+1746060195 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\core\engine.h
 	<vector>
 	<string>
 	<random>
@@ -978,6 +978,7 @@
 	"SDL_image.h"
 	"SDL_ttf.h"
 	"Obstacle.h"
+	"../Audio/AudioManager.h"
 
 1745398096 0a4a (modify moving + gameover)
 	<vector>
@@ -1004,12 +1005,12 @@
 	<cmath>
 	<algorithm>
 
-1745574056 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\objects\player.h
+1746052451 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\objects\player.h
 	<string>
 	<vector>
 	<SDL.h>
 
-1745701603 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\core\engine.cpp
+1746056917 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\core\engine.cpp
 	<algorithm>
 	<cmath>
 	<iomanip>
@@ -1019,16 +1020,21 @@
 	<vector>
 	"../Graphics/TextureManager.h"
 	"../Objects/Player.h"
+	"../Menu/MainMenu.h"
 	"Engine.h"
+	"../Audio/AudioManager.h"
 
-1745398096 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.h
-	<iomanip>
-	<sstream>
+1746052405 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.h
 	<string>
+	"SDL.h"
+	<map>
 
-1745398096 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.cpp
+1746052412 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\graphics\texturemanager.cpp
+	"TextureManager.h"
+	"../Core/Engine.h"
+	<SDL_image.h>
 
-1745576015 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\objects\player.cpp
+1746052460 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\objects\player.cpp
 	"Player.h"
 	"../Graphics/TextureManager.h"
 	"../Core/Engine.h"
@@ -1071,10 +1077,10 @@
 
 1745398096 source:c:\users\bcphb\downloads\velogame-master\src\objects\player.cpp
 
-1745571494 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\obstacles\obstacle.cpp
+1745754922 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\obstacles\obstacle.cpp
 	"Obstacle.h"
 
-1745572846 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\obstacles\obstacle.h
+1746052480 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\obstacles\obstacle.h
 	<SDL_rect.h>
 	<string>
 
@@ -1099,4 +1105,36 @@
 	"../Core/Engine.h"
 	"../Graphics/TextureManager.h"
 	<SDL.h>
+
+1746060215 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\audio\audiomanager.h
+	<string>
+	<map>
+	<SDL_mixer.h>
+
+1705857752 c:\dev\sdl2_mixer\include\sdl2\sdl_mixer.h
+	"SDL_stdinc.h"
+	"SDL_rwops.h"
+	"SDL_audio.h"
+	"SDL_endian.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1746056847 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\audio\audiomanager.cpp
+	"AudioManager.h"
+	<SDL.h>
+
+1746056930 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\menu\mainmenu.h
+	"SDL.h"
+	"../Core/Engine.h"
+
+1746056946 source:c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\menu\mainmenu.cpp
+	"MainMenu.h"
+	"../Core/Engine.h"
+	"../Graphics/TextureManager.h"
+	"../Audio/AudioManager.h"
+	<SDL.h>
+	<algorithm>
+
+1746056946 fb88 (Sound + buttonVolumeMenu (SDL_mixer-2.8.0))
 
