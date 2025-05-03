@@ -9,7 +9,6 @@
 #include "SDL_ttf.h"
 #include "Obstacle.h"
 #include "../Audio/AudioManager.h"
-
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 #define VOLUME_MAX 128
@@ -22,7 +21,8 @@ enum GameState {
     STATE_PLAYING,
     STATE_GAME_OVER,
     STATE_ABOUT,
-    STATE_WIN
+    STATE_WIN,
+    STATE_PAUSED
 };
 
 class Engine
@@ -32,7 +32,6 @@ public:
     {
         return s_Instance = (s_Instance != nullptr)? s_Instance : new Engine();
     }
-
     bool Init();
     bool Clean();
     void Quit();
@@ -52,12 +51,19 @@ public:
     inline bool IsMuted() const { return m_isMuted; }
     inline int GetMasterVolume() const { return m_currentMasterVolume; }
 
+    void TogglePause();
+    void RenderPauseMenu();
+    void HandleEvents(SDL_Event& e);
+    void ResetGameData();
+
 private:
     Engine() :
         m_IsRunning(false),
         m_Window(nullptr),
         m_Renderer(nullptr),
         m_Player(nullptr),
+        m_isPaused(false),
+        m_menuOption(0),
         m_lastTick(0),
         m_deltaTime(0.0f),
         m_BackgroundScrollX(0.0f),
@@ -91,6 +97,7 @@ private:
         m_returnPromptTexture(nullptr),
         m_showReturnPrompt(false),
         m_endScreenStartTime(0)
+
     {}
 
     int m_currentMasterVolume;
@@ -134,8 +141,8 @@ private:
     std::vector<std::string> m_obstacleTextureIds;
     std::mt19937 m_rng;
     Uint32 m_lastMaxSpeedIncreaseTime;
-    const Uint32 m_maxSpeedIncreaseInterval;
-    const float m_maxSpeedIncreaseAmount;
+    Uint32 m_maxSpeedIncreaseInterval;
+    float m_maxSpeedIncreaseAmount;
     const float m_absoluteMaxPlayerSpeed;
     const int m_doubleSpawnChance;
     float m_totalDistanceTraveled;
@@ -146,7 +153,14 @@ private:
     int m_lastDisplayedDistance;
     int m_lastCountdownSecondPlayed;
 
+    const int MAX_ACTIVE_OBSTACLES = 1;
+
     void SpawnObstacle();
+
+    bool m_isPaused;
+    int m_menuOption=0;
+    SDL_Rect continueRect;
+    SDL_Rect restartRect;
 };
 
 #endif // ENGINE_H

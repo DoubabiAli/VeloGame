@@ -42,12 +42,16 @@
 			<Add directory="C:/Dev/SDL2_image/lib" />
 		</Linker>
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Audio/AudioManager.cpp" />
+		<Unit filename="src/Audio/AudioManager.h" />
 		<Unit filename="src/Core/Engine.cpp" />
 		<Unit filename="src/Core/Engine.h" />
 		<Unit filename="src/Graphics/TextureManager.cpp" />
 		<Unit filename="src/Graphics/TextureManager.h" />
 		<Unit filename="src/Menu/MainMenu.cpp" />
 		<Unit filename="src/Menu/MainMenu.h" />
+		<Unit filename="src/Menu/Pause_Menu.cpp" />
+		<Unit filename="src/Menu/Pause_Menu.h" />
 		<Unit filename="src/Objects/Player.cpp" />
 		<Unit filename="src/Objects/Player.h" />
 		<Unit filename="src/Obstacles/Obstacle.cpp" />

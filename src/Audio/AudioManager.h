@@ -27,7 +27,9 @@ public:
     void SetMusicVolume(int volume);
     void SetSoundVolume(const std::string& soundId, int volume);
     void SetAllSoundsVolume(int volume);
-
+////////
+    bool IsMusicPaused();
+/////////
 private:
     AudioManager() {}
     static AudioManager* s_Instance;

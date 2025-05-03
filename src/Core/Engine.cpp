@@ -10,10 +10,161 @@
 #include "../Graphics/TextureManager.h"
 #include "../Menu/MainMenu.h"
 #include "../Objects/Player.h"
+#include "../Menu/Pause_Menu.h"
 #include "Engine.h"
 
 Engine* Engine::s_Instance = nullptr;
 
+
+void Engine::TogglePause() {
+  if (m_gameState == STATE_PLAYING) {
+    m_isPaused = !m_isPaused;
+    if (m_isPaused) {
+      m_gameState = STATE_PAUSED;
+      SDL_Log("Jeu mis en pause");
+    } else {
+      m_gameState = STATE_PLAYING;
+      SDL_Log("Jeu repris");
+    }
+  }
+}
+
+void Engine::RenderPauseMenu() {
+
+    SDL_SetRenderDrawBlendMode(m_Renderer, SDL_BLENDMODE_BLEND);
+
+    int menuWidth = 400;
+    int menuHeight = 200;
+    int menuX = (SCREEN_WIDTH - menuWidth) / 2;
+    int menuY = (SCREEN_HEIGHT - menuHeight) / 2;
+    SDL_Rect pauseMenuRect = { menuX, menuY, menuWidth, menuHeight };
+
+
+    SDL_SetRenderDrawColor(m_Renderer, 71, 71, 71, 23);
+    SDL_RenderFillRect(m_Renderer, &pauseMenuRect);
+
+
+    SDL_Color textColor = {25, 15, 70};
+    TTF_Font* font = TTF_OpenFont("assets/FiraCode-Bold.ttf", 54);
+    if (!font) {
+        SDL_Log("Erreur chargement font: %s", TTF_GetError());
+        return;
+    }
+
+    SDL_Surface* continueSurface = TTF_RenderText_Solid(font, "Continuer ", textColor);
+    SDL_Texture* continueTexture = SDL_CreateTextureFromSurface(m_Renderer, continueSurface);
+    SDL_FreeSurface(continueSurface);
+    SDL_Rect continueRect = { menuX + 100, menuY + 40, 200, 40 };
+    SDL_RenderCopy(m_Renderer, continueTexture, NULL, &continueRect);
+    SDL_DestroyTexture(continueTexture);
+
+    SDL_Surface* restartSurface = TTF_RenderText_Solid(font, "Quitter ", textColor);
+    SDL_Texture* restartTexture = SDL_CreateTextureFromSurface(m_Renderer, restartSurface);
+    SDL_FreeSurface(restartSurface);
+    SDL_Rect restartRect = { menuX + 100, menuY + 90, 200, 40 };
+    SDL_RenderCopy(m_Renderer, restartTexture, NULL, &restartRect);
+    SDL_DestroyTexture(restartTexture);
+
+   SDL_Color gold = {26, 15, 70, 255};
+   if(m_menuOption == 0) {
+      SDL_Surface* arrowSurface = TTF_RenderText_Solid(font, ">", gold);
+      SDL_Rect arrowRect = {continueRect.x - 30, continueRect.y, 20, 30};
+      SDL_RenderCopy(m_Renderer, SDL_CreateTextureFromSurface(m_Renderer, arrowSurface), NULL, &arrowRect);
+}
+   else {
+     SDL_Surface* arrowSurface = TTF_RenderText_Solid(font, ">", gold);
+     SDL_Rect arrowRect = {restartRect.x - 30, restartRect.y, 20, 30};
+     SDL_RenderCopy(m_Renderer, SDL_CreateTextureFromSurface(m_Renderer, arrowSurface), NULL, &arrowRect);
+}
+
+
+    TTF_CloseFont(font);
+}
+
+
+
+void Engine::ResetGameData()
+{
+
+    m_remainingSeconds = 60;
+    m_totalDistanceTraveled = 0.0f;
+    m_showGameOverScreen = false;
+
+    m_obstacles.clear();
+
+    m_obstacleSpawnInterval = 2.3f;
+    m_timeSinceLastSpawn = 0.0f;
+    m_minSpawnInterval = 0.55f;
+    m_spawnIntervalReduction = 0.18f;
+
+    m_lastMaxSpeedIncreaseTime = 0;
+    m_maxSpeedIncreaseInterval = 1000;
+    m_maxSpeedIncreaseAmount = 20.0f;
+
+    if (m_Player != nullptr) {
+        delete m_Player;
+        m_Player = nullptr;
+    }
+
+    m_gameState = STATE_PLAYING;
+    m_isPaused = false;
+
+
+    m_currentMasterVolume = VOLUME_MAX;
+    m_isMuted = false;
+}
+
+
+
+
+void Engine::HandleEvents(SDL_Event& e) {
+    if (e.type == SDL_KEYDOWN) {
+        if (e.key.keysym.sym == SDLK_p) {
+            TogglePause();
+        }
+
+        if (m_isPaused) {
+            if (e.key.keysym.sym == SDLK_UP) {
+                m_menuOption = 0;
+                SDL_Log("Option sélectionnée: Continuer");
+            }
+            if (e.key.keysym.sym == SDLK_DOWN) {
+                m_menuOption = 1;
+                SDL_Log("Option sélectionnée: Redémarrer");
+            }
+            if (e.key.keysym.sym == SDLK_RETURN) {
+                if (m_menuOption == 0) {
+                    m_isPaused = false;
+                    m_gameState = STATE_PLAYING;
+                    SDL_Log("Jeu repris");
+                } else if (m_menuOption == 1) {
+                    ResetGameData();
+                    m_isPaused = false;
+
+                    m_gameState = STATE_MAIN_MENU;
+                    SDL_Log("Jeu redémarré");
+                }
+            }
+        }
+    }
+    else if (e.type == SDL_MOUSEBUTTONDOWN && m_isPaused) {
+        if (e.button.button == SDL_BUTTON_LEFT) {
+            SDL_Point mousePos = {e.button.x, e.button.y};
+
+            if (SDL_PointInRect(&mousePos, &continueRect)) {
+                m_isPaused = false;
+                m_gameState = STATE_PLAYING;
+                SDL_Log("Clic sur Continuer");
+            }
+            else if (SDL_PointInRect(&mousePos, &restartRect)) {
+                ResetGameData();
+                m_isPaused = false;
+                m_gameState = STATE_MAIN_MENU;
+                SDL_Log("Clic sur Redémarrer");
+            }
+        }
+    }
+}
 void Engine::ApplyMasterVolume() {
   if (m_isMuted) {
     AudioManager::GetInstance()->SetMusicVolume(0);
@@ -105,7 +256,7 @@ bool Engine::Init() {
     return false;
   }
   if (!MainMenu::GetInstance()->Init()) {
-    SDL_Log("Erreur : �chec de l'initialisation du menu principal.");
+    SDL_Log("Erreur : Échec de l'initialisation du menu principal.");
     SDL_DestroyRenderer(m_Renderer);
     SDL_DestroyWindow(m_Window);
     AudioManager::GetInstance()->Clean();
@@ -142,6 +293,7 @@ bool Engine::Init() {
     return false;
   }
   m_timerTextures.push_back("end");
+
   if (!TextureManager::GetInstance()->Load("gameover", "assets/game_over.png")) {
     return false;
   }
@@ -279,6 +431,12 @@ void Engine::SetGameState(GameState newState) {
   SDL_Log("Changing GameState from %d to %d", oldState, newState);
   m_showReturnPrompt = false;
 
+    if (oldState == STATE_PLAYING && newState == STATE_PAUSED) {
+        AudioManager::GetInstance()->PauseMusic();
+    }
+    else if (oldState == STATE_PAUSED && newState == STATE_PLAYING) {
+        AudioManager::GetInstance()->ResumeMusic();
+    }
   switch (newState) {
     case STATE_MAIN_MENU:
       AudioManager::GetInstance()->PlayMusic("menu_music", -1);
@@ -298,6 +456,7 @@ void Engine::SetGameState(GameState newState) {
       AudioManager::GetInstance()->PlayMusic("game_music", -1);
       m_lastCountdownSecondPlayed = -1;
       break;
+
     case STATE_GAME_OVER:
       AudioManager::GetInstance()->StopMusic();
       AudioManager::GetInstance()->PlaySound("lose", 0);
@@ -313,6 +472,7 @@ void Engine::SetGameState(GameState newState) {
 
 void Engine::SpawnObstacle() {
   if (m_obstacleTextureIds.empty() || m_laneYPositions.empty() || m_obstacleTextureWidth <= 0 || m_laneYPositions.size() < 1) return;
+
   std::vector<int> availableLaneIndices(m_laneYPositions.size());
   std::iota(availableLaneIndices.begin(), availableLaneIndices.end(), 0);
   int nearThresholdX = SCREEN_WIDTH / 2;
@@ -352,6 +512,10 @@ void Engine::SpawnObstacle() {
 }
 
 void Engine::Update() {
+
+   if (m_isPaused) {
+     return;
+}
   Uint32 currentTick = SDL_GetTicks();
   m_deltaTime = (currentTick - m_lastTick) / 1000.0f;
   m_lastTick = currentTick;
@@ -402,10 +566,19 @@ void Engine::Update() {
       m_lastMaxSpeedIncreaseTime = currentTick;
     }
     m_timeSinceLastSpawn += m_deltaTime;
+
     if (m_timeSinceLastSpawn >= m_obstacleSpawnInterval) {
-      SpawnObstacle();
-      m_timeSinceLastSpawn = 0.0f;
-    }
+      int activeObstacles = 0;
+      for (const auto& obs : m_obstacles) {
+        if (obs.isActive) activeObstacles++;
+          }
+
+      if (activeObstacles < MAX_ACTIVE_OBSTACLES) {
+          SpawnObstacle();
+          m_timeSinceLastSpawn = 0.0f;
+  }
+}
+
     SDL_Rect playerFullCollider = m_Player->GetCollider();
     for (auto it = m_obstacles.begin(); it != m_obstacles.end();) {
       if (!it->isActive) {
@@ -458,7 +631,9 @@ void Engine::Update() {
       SDL_Log("WIN CONDITION MET! Distance: %.2f", m_totalDistanceTraveled);
       SetGameState(STATE_WIN);
     }
-  } else if (m_gameState == STATE_GAME_OVER) {
+  }
+
+   else if (m_gameState == STATE_GAME_OVER) {
     if (!m_showGameOverScreen) {
       Uint32 currentTime = SDL_GetTicks();
       if (currentTime - m_gameOverStartTime >= 2000) {
@@ -475,91 +650,130 @@ void Engine::Update() {
     }
   }
 }
-
 void Engine::Render() {
-  if (m_gameState == STATE_MAIN_MENU) {
-    MainMenu::GetInstance()->Render();
+  if (m_isPaused) {
+    RenderPauseMenu();
     SDL_RenderPresent(m_Renderer);
     return;
-  }
+}
 
-  if (m_gameState == STATE_GAME_OVER) {
-    if (m_showGameOverScreen) {
-      SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
+  switch (m_gameState) {
+    case STATE_MAIN_MENU: {
+      MainMenu::GetInstance()->Render();
+      SDL_RenderPresent(m_Renderer);
+      return;
+    }
+
+    case STATE_GAME_OVER: {
+      if (m_showGameOverScreen) {
+        SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
+        SDL_RenderClear(m_Renderer);
+        int imgW = 0, imgH = 0;
+        if (TextureManager::GetInstance()->QueryTexture("gameover", &imgW, &imgH)) {
+          int imgX = (SCREEN_WIDTH - imgW) / 2;
+          int imgY = (SCREEN_HEIGHT - imgH) / 2;
+          TextureManager::GetInstance()->Draw("gameover", imgX, imgY, imgW, imgH);
+        } else {
+          SDL_Log("Warning: Could not find 'gameover' texture to render.");
+        }
+        if (m_showReturnPrompt && m_returnPromptTexture) {
+          SDL_RenderCopy(m_Renderer, m_returnPromptTexture, NULL, &m_returnPromptRect);
+        }
+      } else {
+        SDL_SetRenderDrawColor(m_Renderer, 100, 150, 200, 255);
+        SDL_RenderClear(m_Renderer);
+        int bgScrollInt = static_cast<int>(m_BackgroundScrollX);
+        TextureManager::GetInstance()->Draw("background", bgScrollInt, 0, SCREEN_WIDTH, 400);
+        TextureManager::GetInstance()->Draw("background", bgScrollInt + SCREEN_WIDTH, 0, SCREEN_WIDTH, 400);
+        TextureManager::GetInstance()->Draw("track", 0, static_cast<int>(TRACK_Y_POSITION), SCREEN_WIDTH, static_cast<int>(TRACK_HEIGHT));
+        if (m_Player) m_Player->draw();
+        for (const auto& obs : m_obstacles) {
+          if (obs.isActive)
+            TextureManager::GetInstance()->Draw(obs.textureId, obs.collider.x, obs.collider.y, obs.collider.w, obs.collider.h);
+        }
+        if (TextureManager::GetInstance()->QueryTexture("end", nullptr, nullptr))
+          TextureManager::GetInstance()->Draw("end", m_timerRect.x, m_timerRect.y, m_timerRect.w, m_timerRect.h);
+        else if (TextureManager::GetInstance()->QueryTexture("00", nullptr, nullptr))
+          TextureManager::GetInstance()->Draw("00", m_timerRect.x, m_timerRect.y, m_timerRect.w, m_timerRect.h);
+      }
+      break;
+    }
+
+    case STATE_WIN: {
+      SDL_SetRenderDrawColor(m_Renderer, 20, 20, 80, 255);
       SDL_RenderClear(m_Renderer);
       int imgW = 0, imgH = 0;
-      if (TextureManager::GetInstance()->QueryTexture("gameover", &imgW, &imgH)) {
+      if (TextureManager::GetInstance()->QueryTexture("win", &imgW, &imgH)) {
         int imgX = (SCREEN_WIDTH - imgW) / 2;
         int imgY = (SCREEN_HEIGHT - imgH) / 2;
-        TextureManager::GetInstance()->Draw("gameover", imgX, imgY, imgW, imgH);
+        TextureManager::GetInstance()->Draw("win", imgX, imgY, imgW, imgH);
       } else {
-        SDL_Log("Warning: Could not find 'gameover' texture to render.");
+        SDL_Log("Warning: Could not find 'win' texture to render.");
       }
       if (m_showReturnPrompt && m_returnPromptTexture) {
         SDL_RenderCopy(m_Renderer, m_returnPromptTexture, NULL, &m_returnPromptRect);
       }
-    } else {
+      break;
+    }
+
+    case STATE_ABOUT: {
+      SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
+      SDL_RenderClear(m_Renderer);
+      if (TextureManager::GetInstance()->QueryTexture("about_screen", nullptr, nullptr)) {
+        TextureManager::GetInstance()->Draw("about_screen", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+      }
+      break;
+    }
+
+    case STATE_START_SCREEN:
+    case STATE_PLAYING: {
       SDL_SetRenderDrawColor(m_Renderer, 100, 150, 200, 255);
       SDL_RenderClear(m_Renderer);
       int bgScrollInt = static_cast<int>(m_BackgroundScrollX);
       TextureManager::GetInstance()->Draw("background", bgScrollInt, 0, SCREEN_WIDTH, 400);
       TextureManager::GetInstance()->Draw("background", bgScrollInt + SCREEN_WIDTH, 0, SCREEN_WIDTH, 400);
       TextureManager::GetInstance()->Draw("track", 0, static_cast<int>(TRACK_Y_POSITION), SCREEN_WIDTH, static_cast<int>(TRACK_HEIGHT));
+
+      if (m_gameState == STATE_PLAYING) {
+        for (const auto& obs : m_obstacles) {
+          if (obs.isActive)
+            TextureManager::GetInstance()->Draw(obs.textureId, obs.collider.x, obs.collider.y, obs.collider.w, obs.collider.h);
+        }
+      }
+
       if (m_Player) m_Player->draw();
-      for (const auto& obs : m_obstacles) {
-        if (obs.isActive) TextureManager::GetInstance()->Draw(obs.textureId, obs.collider.x, obs.collider.y, obs.collider.w, obs.collider.h);
+
+      if (m_gameState == STATE_START_SCREEN) {
+        if (TextureManager::GetInstance()->QueryTexture("start", nullptr, nullptr))
+          TextureManager::GetInstance()->Draw("start", m_timerRect.x, m_timerRect.y, m_timerRect.w, m_timerRect.h);
       }
-      if (TextureManager::GetInstance()->QueryTexture("end", nullptr, nullptr))
-        TextureManager::GetInstance()->Draw("end", m_timerRect.x, m_timerRect.y, m_timerRect.w, m_timerRect.h);
-      else if (TextureManager::GetInstance()->QueryTexture("00", nullptr, nullptr))
-        TextureManager::GetInstance()->Draw("00", m_timerRect.x, m_timerRect.y, m_timerRect.w, m_timerRect.h);
-    }
-  } else if (m_gameState == STATE_WIN) {
-    SDL_SetRenderDrawColor(m_Renderer, 20, 20, 80, 255);
-    SDL_RenderClear(m_Renderer);
-    int imgW = 0, imgH = 0;
-    if (TextureManager::GetInstance()->QueryTexture("win", &imgW, &imgH)) {
-      int imgX = (SCREEN_WIDTH - imgW) / 2;
-      int imgY = (SCREEN_HEIGHT - imgH) / 2;
-      TextureManager::GetInstance()->Draw("win", imgX, imgY, imgW, imgH);
-    } else {
-      SDL_Log("Warning: Could not find 'win' texture to render.");
-    }
-    if (m_showReturnPrompt && m_returnPromptTexture) {
-      SDL_RenderCopy(m_Renderer, m_returnPromptTexture, NULL, &m_returnPromptRect);
-    }
-  } else {
-    SDL_SetRenderDrawColor(m_Renderer, 100, 150, 200, 255);
-    SDL_RenderClear(m_Renderer);
-    int bgScrollInt = static_cast<int>(m_BackgroundScrollX);
-    TextureManager::GetInstance()->Draw("background", bgScrollInt, 0, SCREEN_WIDTH, 400);
-    TextureManager::GetInstance()->Draw("background", bgScrollInt + SCREEN_WIDTH, 0, SCREEN_WIDTH, 400);
-    TextureManager::GetInstance()->Draw("track", 0, static_cast<int>(TRACK_Y_POSITION), SCREEN_WIDTH, static_cast<int>(TRACK_HEIGHT));
-    if (m_gameState == STATE_PLAYING) {
-      for (const auto& obs : m_obstacles) {
-        if (obs.isActive) TextureManager::GetInstance()->Draw(obs.textureId, obs.collider.x, obs.collider.y, obs.collider.w, obs.collider.h);
+
+      if (m_gameState == STATE_PLAYING) {
+        std::string currentTimerTextureId = "end";
+        if (m_remainingSeconds > 0 && m_remainingSeconds <= 60) {
+          std::ostringstream ss;
+          ss << std::setw(2) << std::setfill('0') << m_remainingSeconds;
+          currentTimerTextureId = ss.str();
+        }
+        if (TextureManager::GetInstance()->QueryTexture(currentTimerTextureId, nullptr, nullptr)) {
+          TextureManager::GetInstance()->Draw(currentTimerTextureId, m_timerRect.x, m_timerRect.y, m_timerRect.w, m_timerRect.h);
+        }
       }
+
+      if (m_distanceTexture != nullptr && (m_gameState == STATE_PLAYING || m_gameState == STATE_START_SCREEN)) {
+        SDL_RenderCopy(m_Renderer, m_distanceTexture, NULL, &m_distanceRect);
+      }
+
+      break;
     }
-    if (m_Player) m_Player->draw();
-    if (m_gameState == STATE_START_SCREEN) {
-      if (TextureManager::GetInstance()->QueryTexture("start", nullptr, nullptr)) TextureManager::GetInstance()->Draw("start", m_timerRect.x, m_timerRect.y, m_timerRect.w, m_timerRect.h);
-    } else if (m_gameState == STATE_ABOUT) {
+
+    default: {
       SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
       SDL_RenderClear(m_Renderer);
-      if (TextureManager::GetInstance()->QueryTexture("about_screen", nullptr, nullptr)) TextureManager::GetInstance()->Draw("about_screen", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    } else if (m_gameState == STATE_PLAYING) {
-      std::string currentTimerTextureId = "end";
-      if (m_remainingSeconds > 0 && m_remainingSeconds <= 60) {
-        std::ostringstream ss;
-        ss << std::setw(2) << std::setfill('0') << m_remainingSeconds;
-        currentTimerTextureId = ss.str();
-      }
-      if (TextureManager::GetInstance()->QueryTexture(currentTimerTextureId, nullptr, nullptr)) TextureManager::GetInstance()->Draw(currentTimerTextureId, m_timerRect.x, m_timerRect.y, m_timerRect.w, m_timerRect.h);
-    }
-    if (m_distanceTexture != nullptr && (m_gameState == STATE_PLAYING || m_gameState == STATE_START_SCREEN)) {
-      SDL_RenderCopy(m_Renderer, m_distanceTexture, NULL, &m_distanceRect);
+      break;
     }
   }
+
   SDL_RenderPresent(m_Renderer);
 }
 
@@ -599,15 +813,48 @@ void Engine::Events() {
         }
         break;
       case STATE_PLAYING:
-        if ((event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) && m_Player && event.key.repeat == 0) {
-          m_Player->handleEvent(event);
+        if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
+
+           if (event.key.keysym.sym == SDLK_p || event.key.keysym.sym == SDLK_ESCAPE) {
+             m_isPaused = !m_isPaused;
+             if (m_isPaused) {
+                AudioManager::GetInstance()->PauseMusic();
+    }        else {
+                AudioManager::GetInstance()->ResumeMusic();
+    }
         }
-        break;
+
+
+             if (m_isPaused) {
+               if (event.key.keysym.sym == SDLK_UP) {
+                  m_menuOption = 0;
+            }  else if (event.key.keysym.sym == SDLK_DOWN) {
+                  m_menuOption = 1;
+            }  else if (event.key.keysym.sym == SDLK_RETURN) {
+                  if (m_menuOption == 0) {
+                      m_isPaused = false;
+                } else if (m_menuOption == 1) {
+                      ResetGameData();
+                      m_isPaused = false;
+                }
+            }
+        }    else {
+
+               if (m_Player) {
+                  m_Player->handleEvent(event);
+            }
+        }
+    }
+        if (event.type == SDL_KEYUP && !m_isPaused && m_Player && event.key.repeat == 0) {
+           m_Player->handleEvent(event);
+    }
+    break;
       case STATE_ABOUT:
         if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
           SetGameState(STATE_MAIN_MENU);
         }
         break;
+
       case STATE_GAME_OVER:
       case STATE_WIN:
         if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r) {
@@ -636,6 +883,7 @@ void Engine::Events() {
         }
         break;
     }
+
   }
 }
 

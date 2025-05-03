@@ -467,11 +467,11 @@
 	"TextureManager.h"
 	"Engine.h"
 
-1745714228 source:c:\users\dell\velogame\main.cpp
+1746102652 source:c:\users\dell\velogame\main.cpp
 	<SDL.h>
 	"src/Core/Engine.h"
 
-1745753667 source:c:\users\dell\velogame\src\core\engine.cpp
+1746287894 source:c:\users\dell\velogame\src\core\engine.cpp
 	<algorithm>
 	<cmath>
 	<iomanip>
@@ -479,12 +479,14 @@
 	<sstream>
 	<string>
 	<vector>
+	"../Audio/AudioManager.h"
 	"../Graphics/TextureManager.h"
-	"../Objects/Player.h"
 	"../Menu/MainMenu.h"
+	"../Objects/Player.h"
+	"../Menu/Pause_Menu.h"
 	"Engine.h"
 
-1745717981 c:\users\dell\velogame\src\core\engine.h
+1746291879 c:\users\dell\velogame\src\core\engine.h
 	<vector>
 	<string>
 	<random>
@@ -492,13 +494,14 @@
 	"SDL_image.h"
 	"SDL_ttf.h"
 	"Obstacle.h"
+	"../Audio/AudioManager.h"
 
-1745710408 source:c:\users\dell\velogame\src\graphics\texturemanager.cpp
+1746102652 source:c:\users\dell\velogame\src\graphics\texturemanager.cpp
 	"TextureManager.h"
 	"../Core/Engine.h"
 	<SDL_image.h>
 
-1745710408 c:\users\dell\velogame\src\graphics\texturemanager.h
+1746102652 c:\users\dell\velogame\src\graphics\texturemanager.h
 	<string>
 	"SDL.h"
 	<map>
@@ -951,7 +954,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1745710408 source:c:\users\dell\velogame\src\objects\player.cpp
+1746102652 source:c:\users\dell\velogame\src\objects\player.cpp
 	"Player.h"
 	"../Graphics/TextureManager.h"
 	"../Core/Engine.h"
@@ -959,7 +962,7 @@
 	<cmath>
 	<algorithm>
 
-1745710408 c:\users\dell\velogame\src\objects\player.h
+1746283996 c:\users\dell\velogame\src\objects\player.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -1089,22 +1092,24 @@
 	"begin_code.h"
 	"close_code.h"
 
-1745710408 c:\users\dell\velogame\src\obstacles\obstacle.h
+1746102652 c:\users\dell\velogame\src\obstacles\obstacle.h
 	<SDL_rect.h>
 	<string>
 
-1745710408 source:c:\users\dell\velogame\src\obstacles\obstacle.cpp
+1746102652 source:c:\users\dell\velogame\src\obstacles\obstacle.cpp
 	"Obstacle.h"
 
-1745717608 c:\users\dell\velogame\src\menu\mainmenu.h
+1746102652 c:\users\dell\velogame\src\menu\mainmenu.h
 	"SDL.h"
 	"../Core/Engine.h"
 
-1745714604 source:c:\users\dell\velogame\src\menu\mainmenu.cpp
+1746102652 source:c:\users\dell\velogame\src\menu\mainmenu.cpp
 	"MainMenu.h"
 	"../Core/Engine.h"
 	"../Graphics/TextureManager.h"
+	"../Audio/AudioManager.h"
 	<SDL.h>
+	<algorithm>
 
 1746060215 c:\users\bcphb\desktop\velogame\projet\gameengine_2d\gameengine_2d\src\audio\audiomanager.h
 	<string>
@@ -1137,4 +1142,17 @@
 	<algorithm>
 
 1746056946 fb88 (Sound + buttonVolumeMenu (SDL_mixer-2.8.0))
+
+1746143672 c:\users\dell\velogame\src\audio\audiomanager.h
+	<string>
+	<map>
+	<SDL_mixer.h>
+
+1746143672 source:c:\users\dell\velogame\src\audio\audiomanager.cpp
+	"AudioManager.h"
+	<SDL.h>
+
+1746205716 source:c:\users\dell\velogame\src\menu\pause_menu.cpp
+
+1746205716 c:\users\dell\velogame\src\menu\pause_menu.h
 

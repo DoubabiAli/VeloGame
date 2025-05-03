@@ -110,7 +110,11 @@ void AudioManager::ResumeMusic() {
     if (Mix_PausedMusic()) {
         Mix_ResumeMusic();
     }
+}/////////
+bool AudioManager::IsMusicPaused() {
+    return Mix_PausedMusic();
 }
+///
 
 void AudioManager::SetMusicVolume(int volume) {
     volume = (volume < 0) ? 0 : (volume > MIX_MAX_VOLUME) ? MIX_MAX_VOLUME : volume;

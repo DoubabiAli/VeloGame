@@ -8,7 +8,6 @@
 class Player {
 public:
     Player();
-
     bool load(std::string textureId, float startX, const std::vector<float>& laneYPositions);
     void handleEvent(const SDL_Event& event);
     void update(float deltaTime);
@@ -23,6 +22,7 @@ public:
 
 private:
     float m_x;
+
     float m_currentY;
     float m_targetY;
     int m_currentLane;
