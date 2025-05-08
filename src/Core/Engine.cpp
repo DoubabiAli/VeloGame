@@ -346,7 +346,7 @@ bool Engine::Init() {
     SDL_Log("Failed to load countdown sound");
   }
 
-  m_uiFont = TTF_OpenFont("assets/PixelifySans-Regular.ttf", 24);
+  m_uiFont = TTF_OpenFont("assets/FiraCode-Bold.ttf", 24);
   if (m_uiFont == nullptr) {
     SDL_Log("Failed to load UI font: %s", TTF_GetError());
     AudioManager::GetInstance()->Clean();
@@ -381,7 +381,7 @@ bool Engine::Init() {
   }
 
   SDL_Color textColor = {255, 255, 255, 255};
-  SDL_Surface* surface = TTF_RenderText_Solid(m_uiFont, "Press ESC to return to menu", textColor);
+  SDL_Surface* surface = TTF_RenderText_Solid(m_uiFont, "Cliquer sur Esc pour retourner au menu principale", textColor);
   if (surface) {
     m_returnPromptTexture = SDL_CreateTextureFromSurface(m_Renderer, surface);
     if (m_returnPromptTexture) {

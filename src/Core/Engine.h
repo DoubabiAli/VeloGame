@@ -7,7 +7,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
-#include "Obstacle.h"
+//#include "Obstacle.h"
 #include "../Audio/AudioManager.h"
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600

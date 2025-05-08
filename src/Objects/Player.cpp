@@ -12,7 +12,7 @@ Player::Player() :
     m_currentLane(0),
     m_numLanes(0),
     m_laneChangeAnimSpeed(700.0f),
-    m_speed(0.0f),
+    m_speed(06.0f),
     m_acceleration(300.0f),
     m_braking(1000.0f),
     m_drag(0.90f),
